@@ -88,7 +88,7 @@ text
 ## 📢 Contacto y feedback
 
 ¿Tienes dudas, sugerencias o quieres compartir tu experiencia usando estas plantillas?  
-Puedes abrir un issue en GitHub o contactar conmigo en [tu-email@ejemplo.com].
+Puedes abrir un issue en GitHub o contactar conmigo en [joviales.artes-5d@icloud.com].
 
 ---
 
