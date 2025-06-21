@@ -1,95 +1,191 @@
-# AndroidTemplates
+# README para PruebasGoogleMaps - Proyecto Android con Google Maps
 
-Plantillas base para proyectos Android en Kotlin. Este repositorio está pensado como un **curso práctico y progresivo**: cada carpeta es un mini-proyecto independiente que explora una funcionalidad concreta, desde vistas básicas hasta integración de mapas, inyección de dependencias y más.
+## 📁 Estructura del Proyecto
 
----
+PruebasGoogleMaps/
+├── app/
+│ ├── build.gradle.kts # Configuración del módulo principal
+│ ├── src/main/
+│ │ ├── AndroidManifest.xml # Configuración de permisos y componentes
+│ │ ├── java/ # Código fuente Kotlin
+│ │ └── res/ # Recursos (layouts, strings, etc)
+├── build.gradle.kts # Configuración global del proyecto
+├── settings.gradle.kts # Definición de módulos
+├── gradle/
+│ └── libs.versions.toml # Centralización de versiones de dependencias
+├── secrets.properties # Clave API de Google Maps (NO SUBIR A GIT)
+└── local.defaults.properties # Clave dummy por defecto
 
-## 🚀 ¿Qué encontrarás aquí?
-
-- **Plantillas de vistas**: Ejemplos de layouts, navegación y componentes UI modernos.
-- **Google Maps**: Proyecto base para integrar mapas de Google en Android.
-- **Mapas gratuitos**: Ejemplo usando alternativas open source a Google Maps.
-- **Inyección de dependencias (Hilt/DI)**: Proyecto para aprender y practicar Hilt paso a paso.
-- **Pruebas y experimentos**: Cada vez que encuentre una funcionalidad interesante, crearé un mini-proyecto explicativo.
-- **Enfoque didáctico**: Cada plantilla está pensada como un "mini-curso", con comentarios y estructura fácil de seguir, sin importar tu nivel.
-
----
-
-## 📂 Estructura del repositorio
-
-AndroidTemplates/
-│
-├── vistas-basicas/
-│ └── ... (layouts, navigation, etc.)
-├── google-maps/
-│ └── ... (integración de mapas de Google)
-├── mapas-gratis/
-│ └── ... (OpenStreetMap, MapLibre, etc.)
-├── hilt-di/
-│ └── ... (ejemplo de inyección de dependencias)
-├── ... (más plantillas en el futuro)
-└── README.md
-text
 
 ---
 
-## 🧑‍💻 ¿Cómo usar estas plantillas?
+## 🔐 Configuración Clave de Google Maps
 
-1. **Clona el repositorio**:
-git clone https://github.com/SimTera/AndroidTemplates.git
-text
-2. **Abre la carpeta del proyecto que te interese** en Android Studio.
-3. **Lee los comentarios y sigue los pasos** en el código y el README de cada plantilla.
-4. **Copia, adapta y reutiliza** lo que necesites en tus propios proyectos.
+Crea `secrets.properties` en la raíz del proyecto con:
 
----
+```properties
+MAPS_API_KEY=TU_CLAVE_AQUÍ
+Añade al .gitignore:
 
-## 📚 Filosofía del repositorio
+secrets.properties
+En AndroidManifest.xml:
 
-- **Aprender haciendo**: Cada plantilla es un ejemplo real y funcional, no solo teoría.
-- **Documentación clara**: Comentarios y explicaciones en el código para que puedas entender el "porqué" de cada decisión.
-- **Independencia de nivel**: Pensado para que cualquier persona, sin importar su experiencia, pueda seguir los ejemplos y aprender a su ritmo.
-- **Reutilizable y ampliable**: Puedes usar estas plantillas como base para tus propios proyectos o para experimentar con nuevas tecnologías.
+<meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="${MAPS_API_KEY}" />
+📦 Configuración de Dependencias (libs.versions.toml)
 
----
+En gradle/libs.versions.toml:
 
-## 📝 Licencia
+[versions]
+androidx-compose-bom = "2023.08.00"
+maps-compose = "4.4.1"
+play-services-maps = "18.2.0"
+play-services-location = "21.2.0"
 
-Este repositorio está bajo licencia **MIT**. Puedes usar, modificar y compartir el código libremente, siempre que incluyas la nota de copyright original.
+[libraries]
+# Jetpack Compose
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
-MIT License
-Copyright (c) 2025 SimTera
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-text
+# Google Maps
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-services-maps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
----
+[plugins]
+android-application = { id = "com.android.application", version = "8.3.0" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.20" }
+🛠 build.gradle.kts (Nivel Proyecto)
 
-## 🤝 Contribuciones
+buildscript {
+    dependencies {
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+    }
+}
 
-¿Quieres aportar una nueva plantilla, mejorar la documentación o sugerir una funcionalidad?  
-¡Haz un fork, crea una rama y envía tu pull request! Toda contribución es bienvenida.
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+}
+📱 build.gradle.kts (Módulo app)
 
----
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+}
 
-## 📢 Contacto y feedback
+android {
+    namespace = "com.example.pruebasgooglemaps"
+    compileSdk = 35
 
-¿Tienes dudas, sugerencias o quieres compartir tu experiencia usando estas plantillas?  
-Puedes abrir un issue en GitHub o contactar conmigo en [joviales.artes-5d@icloud.com].
+    defaultConfig {
+        applicationId = "com.example.pruebasgooglemaps"
+        minSdk = 24
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
+    }
 
----
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
 
-**¡Espero que este repositorio te ayude a aprender, experimentar y crear proyectos Android de forma más fácil y profesional!**
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
+}
+
+dependencies {
+    // Jetpack Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+
+    // Google Maps
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
+}
+🧾 AndroidManifest.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permisos esenciales -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:theme="@style/Theme.PruebasGoogleMaps">
+        
+        <!-- API Key de Google Maps -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+🗺 Ejemplo de Código (MainActivity.kt)
+
+@Composable
+fun MapScreen() {
+    val madrid = LatLng(40.4168, -3.7038)
+    val markerState = rememberMarkerState(position = madrid)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(madrid, 12f)
+    }
+    
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState,
+        properties = MapProperties(mapType = MapType.HYBRID),
+        uiSettings = MapUiSettings(zoomControlsEnabled = true)
+    ) {
+        Marker(
+            state = markerState,
+            title = "Madrid",
+            snippet = "Capital de España"
+        )
+    }
+}
+✅ Flujo de Trabajo Recomendado
+
+Configura API Key en secrets.properties
+Sincroniza Gradle: Android Studio > File > Sync Project
+Ejecuta en dispositivo físico (requiere Google Play Services)
+Para desarrollo rápido desde terminal:
+
+./gradlew installDebug
+✍️ Estructura de Commits
+
+git commit -m "feat: add google maps integration"
+git commit -m "refactor: update dependencies using libs.versions"
+git commit -m "docs: update readme with setup instructions"
