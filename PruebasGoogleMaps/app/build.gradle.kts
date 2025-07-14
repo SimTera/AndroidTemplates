@@ -65,6 +65,8 @@ dependencies {
     // Dependencias específicas para Google Maps con Compose
     implementation("com.google.maps.android:maps-compose:4.4.1")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3") // Usa la última versión disponible para corrutinas
+
 
     // Opcional: para usar la ubicación del usuario
     implementation("com.google.android.gms:play-services-location:21.2.0")
