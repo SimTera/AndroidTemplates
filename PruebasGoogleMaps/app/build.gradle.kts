@@ -17,8 +17,7 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Define aquí tu API Key directamente
-        manifestPlaceholders["MAPS_API_KEY"] = project.findProperty("MAPS_API_KEY")?.toString() ?: ""
+
     }
 
     buildTypes {
@@ -39,6 +38,11 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    secrets {
+        defaultPropertiesFileName = "secrets.properties"
+        // opcionalmente, puedes especificar el nombre del recurso generado
     }
 }
 

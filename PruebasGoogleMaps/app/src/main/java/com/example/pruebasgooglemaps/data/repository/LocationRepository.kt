@@ -24,6 +24,8 @@ class LocationRepository(
             }
         } catch (e: SecurityException) {
             null // No se tienen permisos
+        } catch (e: Exception) {
+            null // Otros posibles problemas
         }
     }
 }
