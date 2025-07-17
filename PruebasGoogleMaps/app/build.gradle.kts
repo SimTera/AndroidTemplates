@@ -72,6 +72,10 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3") // Usa la última versión disponible para corrutinas
 
 
-    // Opcional: para usar la ubicación del usuario
+    // Opcional: para usar la ubicación del usuario o un json
     implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation ("com.google.accompanist:accompanist-permissions:0.34.0")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+
 }

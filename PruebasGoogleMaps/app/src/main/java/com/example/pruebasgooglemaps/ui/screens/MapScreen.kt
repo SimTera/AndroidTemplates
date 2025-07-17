@@ -1,45 +1,41 @@
 package com.example.pruebasgooglemaps.ui.screens
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
 import com.example.pruebasgooglemaps.presentation.map.MapViewModel
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.rememberCameraPositionState
-import com.google.maps.android.compose.rememberMarkerState
+import com.example.pruebasgooglemaps.ui.components.GoogleMapComponent
+import com.example.pruebasgooglemaps.data.model.LocationModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MapScreen(viewModel: MapViewModel) {
+    val permisoUbicacion = rememberPermissionState(
+        android.Manifest.permission.ACCESS_FINE_LOCATION
+    )
     val userLocation by viewModel.location.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchUserLocation()
-    }
-    val cameraPositionState = rememberCameraPositionState {
-        position = userLocation?.let {
-            CameraPosition.fromLatLngZoom(LatLng(it.latitude, it.longitude), 15f)
-        } ?: CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 1f)
-    }
+    // PRUEBA: Lista hardcodeada de farmacias/puntos de interés
+    val farmacias = listOf(
+        LocationModel("Farmacia Central", 41.5340, 2.1806),
+        LocationModel("Farmacia 24h", 41.5366, 2.1850)
+    )
 
-    GoogleMap(
-        modifier = Modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
-    ) {
-        userLocation?.let {
-            Marker(
-                state = rememberMarkerState(position = LatLng(it.latitude, it.longitude)),
-                title = "Tu ubicación",
-                snippet = "Estas Aquí!!"
-            )
+    // Pedimos permiso de ubicación y la ubicacion solo si aún no la tenemos
+    LaunchedEffect(permisoUbicacion.status) {
+        if (permisoUbicacion.status.isGranted) {
+            viewModel.fetchUserLocation()
+        } else {
+            permisoUbicacion.launchPermissionRequest()
         }
     }
+
+    // Pasamos la ubicación del usuario y los marcadores a tu GoogleMapComponent
+    GoogleMapComponent(
+        userLocation = userLocation,
+        markers = farmacias
+    )
 }
 
 
